@@ -1,101 +1,53 @@
--- Bootstrap lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-if not (vim.uv or vim.loop).fs_stat(lazypath) then
-  local lazyrepo = "https://github.com/folke/lazy.nvim.git"
-  local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })
-  if vim.v.shell_error ~= 0 then
-    vim.api.nvim_echo({
-      { "Failed to clone lazy.nvim:\n", "ErrorMsg" },
-      { out, "WarningMsg" },
-      { "\nPress any key to exit..." },
-    }, true, {})
-    vim.fn.getchar()
-    os.exit(1)
-  end
-end
-vim.opt.rtp:prepend(lazypath)
-
-require("lazy").setup({
-  spec = {
-    --[[
-	{
-        "dasupradyumna/midnight.nvim",
-        name = "moonfly",
-		lazy = false,
-  		priority = 1000,
-	},
-    ]]
-    --[[
-    {
-        "yorumicolors/yorumi.nvim",
-        lazy = false,
-        priority = 1000,
-        opts = {},
-    },
-    ]]
-    {
-      "folke/tokyonight.nvim",
-      lazy = false,
-      priority = 1000,
-      opts = {},
-    },
-    {
-        "mason-org/mason.nvim",
-        opts = {}
-    },
-	{
-		'nvim-telescope/telescope.nvim', tag = '0.1.8',
-		dependencies = { 'nvim-lua/plenary.nvim' }
-    },
-    {
-        "nvim-treesitter/nvim-treesitter", branch = 'master', lazy = false, build = ":TSUpdate",
-        opts = { highlight = { enable = true }, ensure_installed = { "lua", "python" } }
-    },
-    {
-        "nvim-neo-tree/neo-tree.nvim",
-        branch = "v3.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "MunifTanjim/nui.nvim",
-            "nvim-tree/nvim-web-devicons", -- optional, but recommended
-        },
-        lazy = false, -- neo-tree will lazily load itself
-    },
-    {
-        'nvim-lualine/lualine.nvim',
-        dependencies = { 'nvim-tree/nvim-web-devicons' },
-        opts = { options = { theme = 'auto' }}
-    },
-    {
-       'lewis6991/gitsigns.nvim',
-        opts = {
-          signs = {
-            add = { text = '+' },
-            change = { text = '~' },
-            delete = { text = '_' },
-            topdelete = { text = '‾' },
-            changedelete = { text = '~' },
-            },
-        },
-    }, 
-    {
-        "mason-org/mason.nvim",
-        opts = {},
-    },
-    {
-        "mason-org/mason-lspconfig.nvim",
-        opts = {},
-        dependencies = {
-            "mason-org/mason.nvim", opts = {},
-            "neovim/nvim-lspconfig",
-        },
-        
-    },
-    --{'akinsho/bufferline.nvim', version = "*", dependencies = 'nvim-tree/nvim-web-devicons'}
+vim.pack.add({
+  {
+    src = 'https://github.com/nvim-neo-tree/neo-tree.nvim',
+    version = vim.version.range('3')
   },
-  -- Configure any other settings here. See the documentation for more details.
-  -- colorscheme that will be used when installing plugins.
-  install = { colorscheme = { "midnight" } },
-  -- automatically check for plugin updates
-  checker = { enabled = true },
+  -- dependencies
+  "https://github.com/nvim-lua/plenary.nvim",
+  "https://github.com/MunifTanjim/nui.nvim",
+  -- optional, but recommended
+  "https://github.com/nvim-tree/nvim-web-devicons",
 })
+
+vim.pack.add({"https://github.com/mason-org/mason.nvim"})
+require("mason").setup()
+
+vim.pack.add({
+    'https://github.com/nvim-lualine/lualine.nvim',
+    'https://github.com/nvim-tree/nvim-web-devicons'
+})
+require ("nvim-web-devicons").setup()
+require ("lualine").setup({
+    options = {
+theme = 'auto'
+    }
+})
+
+vim.pack.add({"https://github.com/nvim-treesitter/nvim-treesitter"})
+require("nvim-treesitter.config").setup {
+    install_dir = vim.fn.stdpath('data') .. '/site',
+    highlight = { enable = true },
+    indent = { enable = true }
+}
+require ("nvim-treesitter").install { "lua", "javascript", "python" }
+
+vim.pack.add({"https://github.com/folke/tokyonight.nvim"})
+
+vim.pack.add({"https://github.com/lewis6991/gitsigns.nvim"})
+require('gitsigns').setup {
+    signs = {
+add = { text = '+' },
+change = { text = '~' },
+delete = { text = '_' },
+topdelete = { text = '‾' },
+changedelete = { text = '~' },
+    }
+}
+
+vim.pack.add({"https://github.com/mason-org/mason.nvim"})
+require("mason").setup()
+
+vim.pack.add{
+  { src = 'https://github.com/neovim/nvim-lspconfig' },
+}
