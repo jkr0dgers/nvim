@@ -7,7 +7,8 @@ vim.g.maplocalleader = "\\"
 vim.keymap.set('n', '`', ':botright 12 split | terminal<CR>')    
 vim.keymap.set('n', '<F5>', filerunner.runfile) 
 vim.keymap.set('n', '<F6>', filerunner.runfileVenv)
-vim.keymap.set('i', '<C-n>', '<Esc>o', { noremap = true, silent = true})
+--vim.keymap.set('i', '<C-n>', '<Esc>o', { noremap = true, silent = true})
+
 
 
 local keyskip = function(char)
